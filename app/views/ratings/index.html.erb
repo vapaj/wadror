@@ -1,6 +1,8 @@
 <h1>List of ratings</h1>
 <ul>
  <% @ratings.each do |rating| %>
-   <li> <%= rating.to_s %> </li>
+   <li> <%= rating %> <%= link_to 'delete', rating_path(rating.id), method: :delete %> </li>
  <% end %>
 </ul>
+
+<%= link_to 'New Rating', new_rating_path %>
