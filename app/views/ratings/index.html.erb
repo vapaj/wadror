@@ -1,7 +1,7 @@
 <h1>List of ratings</h1>
 <ul>
  <% @ratings.each do |rating| %>
-   <li> <%= rating %> <%= link_to 'delete', rating_path(rating.id), method: :delete %> </li>
+   <li> <%= rating %> <%= link_to @users.find(rating.user_id).username, user_path(rating.user_id) %> </li>
  <% end %>
 </ul>
 
