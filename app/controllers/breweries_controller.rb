@@ -1,6 +1,5 @@
 class BreweriesController < ApplicationController
-  before_action :set_brewery, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate, only: [:destroy]
+  before_action :ensure_that_signed_in, except: [:index, :show]
 
   # GET /breweries
   # GET /breweries.json
@@ -11,6 +10,7 @@ class BreweriesController < ApplicationController
   # GET /breweries/1
   # GET /breweries/1.json
   def show
+    @brewery = Brewery.find(params[:id])
   end
 
   # GET /breweries/new
@@ -20,6 +20,7 @@ class BreweriesController < ApplicationController
 
   # GET /breweries/1/edit
   def edit
+    @brewery = Brewery.find(params[:id])
   end
 
   # POST /breweries
@@ -41,6 +42,7 @@ class BreweriesController < ApplicationController
   # PATCH/PUT /breweries/1
   # PATCH/PUT /breweries/1.json
   def update
+    @brewery = Brewery.find(params[:id])
     respond_to do |format|
       if @brewery.update(brewery_params)
         format.html { redirect_to @brewery, notice: 'Brewery was successfully updated.' }
@@ -55,6 +57,7 @@ class BreweriesController < ApplicationController
   # DELETE /breweries/1
   # DELETE /breweries/1.json
   def destroy
+    @brewery = Brewery.find(params[:id])
     @brewery.destroy
     respond_to do |format|
       format.html { redirect_to breweries_url, notice: 'Brewery was successfully destroyed.' }
@@ -71,12 +74,5 @@ class BreweriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def brewery_params
       params.require(:brewery).permit(:name, :year)
-    end
-
-    def authenticate
-      admin_accounts = { "admin" => "secret", "pekka" => "beer", "arto" => "foobar", "matti" => "ittam"}
-      authenticate_or_request_with_http_basic do |username, password|
-        admin_accounts[username] == password
-      end
     end
 end
