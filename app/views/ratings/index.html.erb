@@ -1,4 +1,5 @@
 <h1>List of ratings</h1>
+Number of ratings <%= @ratings.count %>
 <ul>
  <% @ratings.each do |rating| %>
    <li> <%= rating %> <%= link_to @users.find(rating.user_id).username, user_path(rating.user_id) %> </li>
