@@ -12,3 +12,5 @@ deploy:
     secure: Iuil9V71wyJ993FZpU4FnoRnnzlHMItMvynldVgi9jY+h/A8xKltrjgI38zEalEP+aEkvAJFcDJ1VC73XScZ2qSyrB89MG2BMY9Wo8eMUMmnX+1YiOIckNuzWic5B0a5DedsnOFFzL0wsTT/wnzJ4LnY83uhM+FTU36Z8ytlOZk=
   app: still-badlands-2854
   run: "rake db:migrate"
+  on:
+    repo: vapaj/wadror
