@@ -1,4 +1,5 @@
 class BeerClubsController < ApplicationController
+  before_action :set_beer_club, only: [:show, :edit, :update, :destroy]
   before_action :ensure_that_signed_in, except: [:index, :show]
 
   # GET /beer_clubs
@@ -10,9 +11,11 @@ class BeerClubsController < ApplicationController
   # GET /beer_clubs/1
   # GET /beer_clubs/1.json
   def show
-    @beer_club = BeerClub.find(params[:id])
+    #@membership = Membership.new
+    @membership = current_user.already_belongs_to_club(@beer_club.id) ? 
+      current_user.memberships.find_by(beer_club_id:@beer_club.id) : Membership.new
+    @membership.beer_club = @beer_club
   end
-
   # GET /beer_clubs/new
   def new
     @beer_club = BeerClub.new
@@ -20,7 +23,6 @@ class BeerClubsController < ApplicationController
 
   # GET /beer_clubs/1/edit
   def edit
-    @beer_club = BeerClub.find(params[:id])
   end
 
   # POST /beer_clubs

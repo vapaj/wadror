@@ -5,7 +5,7 @@
 </p>
 <p>
 	<% unless @user.ratings.empty? %>
-  		Has made <%= pluralize(@user.ratings.count, 'rating') %>
+  		Has made <%= pluralize(@user.ratings.count, 'rating') %>, average <%= @user.average %>
   	<% else %>
   		Has not made any ratings.
   	<% end %>
@@ -24,7 +24,7 @@
   	</ul>
 </p>
 <p>
-	<h3>Is member of clubs</h3>
+<h3>Is member of clubs</h3>
 	<ul>
 	    <% @user.memberships.each do |membership| %>
 	      <li>

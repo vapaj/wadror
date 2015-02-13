@@ -19,17 +19,8 @@ class User < ActiveRecord::Base
  	def favorite_style
  		
  	end
- 	# def calc_style_averages()
- 	# 	Rating.find_each do |r|
-		# 	if(bratings.has_key?(r.beer.style))
-		# 		count = bratings[r.beer.style]['count'] = bratings[r.beer.style]['count'] + 1
-		# 		sum = bratings[r.beer.style]['sum'] = bratings[r.beer.style]['sum'] + r.score
-		# 	else
-		# 		bratings[r.beer.style] = {'count' => 1, 'sum' => r.score, 'avg' => r.score }
-
-			
-		# 	end
-		# end
-
- 	# end
+ 	def already_belongs_to_club(beer_club_id)
+ 		return true if memberships.detect {|m| m.beer_club_id == beer_club_id }
+ 		return false
+ 	end
 end

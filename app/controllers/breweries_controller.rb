@@ -1,4 +1,5 @@
 class BreweriesController < ApplicationController
+  before_action :set_brewery, only: [:show, :edit, :update, :destroy]
   before_action :ensure_that_signed_in, except: [:index, :show]
 
   # GET /breweries
@@ -10,7 +11,6 @@ class BreweriesController < ApplicationController
   # GET /breweries/1
   # GET /breweries/1.json
   def show
-    @brewery = Brewery.find(params[:id])
   end
 
   # GET /breweries/new
@@ -20,7 +20,6 @@ class BreweriesController < ApplicationController
 
   # GET /breweries/1/edit
   def edit
-    @brewery = Brewery.find(params[:id])
   end
 
   # POST /breweries

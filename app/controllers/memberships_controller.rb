@@ -34,7 +34,10 @@ class MembershipsController < ApplicationController
     }
     if not already_belongs_to_club.call and @membership.save
       current_user.memberships << @membership
-      redirect_to user_path current_user
+      flash[:notice] = "#{current_user.username}, welcome to the club!"
+      redirect_to beer_club_path params['membership'][:beer_club_id].to_i
+      
+      # redirect_to user_path current_user
     else
       @beer_clubs = BeerClub.all
       @already_member = true
@@ -60,8 +63,10 @@ class MembershipsController < ApplicationController
   # DELETE /memberships/1.json
   def destroy
     @membership.destroy
+    beer_club_name = BeerClub.find(@membership.beer_club_id).name
     respond_to do |format|
-      format.html { redirect_to memberships_url, notice: 'Membership was successfully destroyed.' }
+      flash[:notice] = "Membership in #{beer_club_name} ended."
+      format.html { redirect_to user_path current_user }
       format.json { head :no_content }
     end
   end
