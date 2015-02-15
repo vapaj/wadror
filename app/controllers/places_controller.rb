@@ -8,7 +8,7 @@ class PlacesController < ApplicationController
   end
 
   def search
-    session[:place_city] = params[:city]
+    session[:place_city] = params[:city] # Tallennetaan tieto sessioon
     @places = BeermappingApi.places_in(params[:city])
     if @places.empty?
       redirect_to places_path, notice: "No locations in #{params[:city]}"
@@ -18,7 +18,7 @@ class PlacesController < ApplicationController
   end
 
   def set_place
-    @places = BeermappingApi.places_in("espoo") and return unless session[:place_city] #GAAHH FIX THIS !
+    return unless session[:place_city]
     @places = BeermappingApi.places_in(session[:place_city])
   end
 end

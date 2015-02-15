@@ -45,6 +45,7 @@ describe User do
   end
   describe "favorite beer" do
   	let(:user){FactoryGirl.create(:user) }
+    let(:style){FactoryGirl.create(:style) }
   	it "has method for determining the favorite_beer" do
   	  expect(user).to respond_to(:favorite_beer)
   	end
@@ -52,7 +53,7 @@ describe User do
   	  expect(user.favorite_beer).to eq(nil)
   	end
   	it "is the only rated if only one rating" do
-        beer = FactoryGirl.create(:beer)
+        beer = FactoryGirl.create(:beer, style:style)
         rating = FactoryGirl.create(:rating, beer:beer, user:user)
 
         expect(user.favorite_beer).to eq(beer)
