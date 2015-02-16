@@ -19,7 +19,7 @@
     <h3>End the membership</h3>
      <%= form_for(@membership, method: "delete") do |f| %>
         <%= f.hidden_field :beer_club_id %>
-        <%= f.submit value:"end the membership" %>
+        <%= f.submit value:"end the membership", class:'btn btn-danger' %>
      <% end %>
   <% end %>
 <% end %>
