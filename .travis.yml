@@ -1,0 +1,18 @@
+language: ruby
+rvm:
+- 2.2.0
+script:
+- bundle exec rake db:migrate --trace
+- RAILS_ENV=test bundle exec rake db:migrate --trace
+- bundle exec rake db:test:prepare
+- bundle exec rspec -fd spec/
+deploy:
+  provider: heroku
+  api_key:
+    secure: NZWqQKYe62bfANwEhRGvp03YHqRQ8ht0dqXtr77J9z2wYIsG2j2J1VV4px6ETpZfqznyYEW4bkMMgkExI/f69CKoGRHrv+E1zNO01UsE0crQZPAu90mx8Ma3FzjMeB39gCnnd3c6HK4wWMBs1H+uYnOitM+cNipVP/Duti2mgac=
+  app: still-badlands-2854
+  on:
+    repo: vapaj/wadror
+  run: "rake db:migrate"
+env:
+- APIKEY=96ce1942872335547853a0bb3b0c24db

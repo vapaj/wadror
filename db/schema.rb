@@ -11,14 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150121124117) do
+=======
+ActiveRecord::Schema.define(version: 20150215164210) do
+
+  create_table "beer_clubs", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "founded"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+>>>>>>> 8dc108030267d845e1014cd7846504698dbb5c67
 
   create_table "beers", force: :cascade do |t|
     t.string   "name"
-    t.string   "style"
     t.integer  "brewery_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "style_id"
   end
 
   create_table "breweries", force: :cascade do |t|
@@ -28,11 +39,36 @@ ActiveRecord::Schema.define(version: 20150121124117) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "memberships", force: :cascade do |t|
+    t.integer  "beer_club_id"
+    t.integer  "user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "ratings", force: :cascade do |t|
     t.integer  "score"
     t.integer  "beer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "user_id"
   end
 
+  create_table "styles", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+<<<<<<< HEAD
+=======
+  create_table "users", force: :cascade do |t|
+    t.string   "username"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "password_digest"
+  end
+
+>>>>>>> 8dc108030267d845e1014cd7846504698dbb5c67
 end

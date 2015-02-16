@@ -1,0 +1,36 @@
+<p id="welcome-to-club" class="welcome-to-club"><%= notice %></p>
+<p>
+  <strong>Name:</strong>
+  <%= @beer_club.name %>
+</p>
+
+<p>
+  <strong>Founded:</strong>
+  <%= @beer_club.founded %>
+</p>
+<% if current_user %>
+  <% unless current_user.already_belongs_to_club(@beer_club.id) %>
+    <h3>Join this club</h3>
+     <%= form_for(@membership) do |f| %>
+        <%= f.hidden_field :beer_club_id %>
+        <%= f.submit value:"join the club" %>
+     <% end %>
+  <% else %>
+    <h3>End the membership</h3>
+     <%= form_for(@membership, method: "delete") do |f| %>
+        <%= f.hidden_field :beer_club_id %>
+        <%= f.submit value:"end the membership" %>
+     <% end %>
+  <% end %>
+<% end %>
+<p>
+  <strong>Members:</strong>
+  <ul>
+  	<% @beer_club.members.each do |member| %>
+        <li><%= member.username %></li>
+      <% end %>
+   </ul>
+</p>
+
+<%= link_to 'Edit', edit_beer_club_path(@beer_club) %> |
+<%= link_to 'Back', beer_clubs_path %>

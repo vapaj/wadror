@@ -1,0 +1,16 @@
+
+<h1>
+  <%= @this_place.name %>
+</h1>
+<p>
+  <%= @this_place.street %>
+</p>
+<p>
+  <%= @this_place.zip %> <%= @this_place.city %>
+</p>
+<iframe
+  width="600"
+  height="450"
+  frameborder="0" style="border:0"
+  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBhTeHCLK1zppx9rf0WcrYSpZzCYrsJS8E&q=<%= @this_place.street %>, <%= @this_place.city %>">
+</iframe>
