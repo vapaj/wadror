@@ -1,4 +1,35 @@
-<h1>List of ratings</h1>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-3"><h2>Three best rated beers</h2>
+			<%= render 'best_rated', best: @three_best_beers %>
+		</div>
+		<div class="col-lg-3"><h2>Three best rated breweries</h2>
+			<%= render 'best_rated', best: @three_best_breweries %>
+		</div>
+		<div class="col-lg-3"><h2>Three best rated styles</h2>
+			<%= render 'best_rated', best: @three_best_styles %>
+		</div>
+
+	</div>
+</div>
+
+
+<h2>Five latest ratings</h2>
+<ul>
+<% @five_latest.each do |rating| %>
+	<li> <%= @users.find(rating.user_id).username %> has rated <%= @beers.find(rating.beer_id).name %> with score of <%= rating.score %> at <%= rating.created_at %></li>
+<% end %>
+</ul>
+
+<h2>Most active users</h2>
+<ul>
+<% @most_active_users.each do |user| %>
+	<li> <%= user.username %></li>
+<% end %>
+</ul>
+
+<h2>List of ratings</h2>
 Number of ratings <%= @ratings.count %>
 <ul>
  <% @ratings.each do |rating| %>
@@ -6,4 +37,4 @@ Number of ratings <%= @ratings.count %>
  <% end %>
 </ul>
 
-<%= link_to 'New Rating', new_rating_path %>
+<%= link_to 'New Rating', new_rating_path, class:'btn btn-primary' %>

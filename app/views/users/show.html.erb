@@ -1,11 +1,25 @@
 <p id="notice"><%= notice %></p>
+<% if current_user and current_user.admin and current_user.id != @user.id %>
+    <% suspend_or_activate = @user.suspended ? "Activate" : "Suspend" %>
+	<p>
+		<h4><%= suspend_or_activate %> account </h4>
+        <%= link_to suspend_or_activate, suspend_user_user_path(@user.id), method: :post, class: "btn btn-danger btn-sm" %>
+    </p>
+<% end %>
+<p>
+  <h2><%= @user.username %>
+  <% if @user.suspended  %>
+    <span class="label label-info">suspended</span>
+  <% end %>
+</h2>
+</p>
 
 <p>
-  <h2><%= @user.username %></h2>
-</p>
-<p>
 	<% unless @user.ratings.empty? %>
-  		Has made <%= pluralize(@user.ratings.count, 'rating') %>, average <%= @user.average %>
+  		Has made <%= pluralize(@user.ratings.count, 'rating') %>, average <%= round(@user.average) %>
+  		<p>Favorite brewery: <%=@user.favorite_brewery.name %> </p>
+		<p>Favorite beer: <%=@user.favorite_beer %> </p>
+		<p>Favorite style: <%=@user.favorite_style %> </p>
   	<% else %>
   		Has not made any ratings.
   	<% end %>
@@ -17,7 +31,7 @@
 	      <li>
 	        <%= rating %>
 	        <% if @user == current_user %>
-	            <%= link_to 'delete', rating, method: :delete, data: { confirm: 'Are you sure?' } %>
+	            <%= link_to 'delete', rating, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %>
 	        <% end %>
 	      </li>
 	    <% end %>

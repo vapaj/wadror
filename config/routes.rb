@@ -19,6 +19,14 @@ Rails.application.routes.draw do
   delete 'signout', to: 'sessions#destroy'
   get 'places', to: 'places#index'
   post 'places', to:'places#search'
+
+  resources :breweries do
+    post 'toggle_activity', on: :member
+  end
+    
+  resources :users do
+    post 'suspend_user', on: :member
+  end
   # get 'ratings', to: 'ratings#index'
   # get 'ratings/new', to:'ratings#new'
   # post 'ratings', to: 'ratings#create'
