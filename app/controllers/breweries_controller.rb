@@ -8,6 +8,33 @@ class BreweriesController < ApplicationController
   def index
     @active_breweries = Brewery.active
     @retired_breweries = Brewery.retired
+    order = params[:order] || 'name'
+    session[:brewery_sorted_by] = "asc" unless session[:brewery_sorted_by]
+
+    sort_by_param = lambda {
+      |breweries, order|
+      case order
+        when 'name' then breweries.sort_by{ |b| b.name }
+        when 'year' then breweries.sort_by{ |b| b.year }
+      end
+    }
+    reverse_sort_by_param = lambda {
+      |breweries, order|
+      case order
+        when 'name' then breweries.sort_by{ |b| b.name }.reverse
+        when 'year' then breweries.sort_by{ |b| b.year }.reverse
+      end
+    }
+
+    if session[:brewery_sorted_by] == "asc"
+      @active_breweries = sort_by_param.call(@active_breweries, order)
+      @retired_breweries = sort_by_param.call(@retired_breweries, order)
+      session[:brewery_sorted_by] = "desc"
+    else
+      session[:brewery_sorted_by] = "asc"
+      @active_breweries = reverse_sort_by_param.call(@active_breweries, order)
+      @retired_breweries = reverse_sort_by_param.call(@retired_breweries, order)
+    end
   end
   
   # GET /breweries/1
