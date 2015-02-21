@@ -12,10 +12,12 @@ class BeerClubsController < ApplicationController
   # GET /beer_clubs/1
   # GET /beer_clubs/1.json
   def show
-    #@membership = Membership.new
-    @membership = current_user.already_belongs_to_club(@beer_club.id) ? 
+    if current_user
+      @membership = current_user.already_belongs_to_club(@beer_club.id) ? 
       current_user.memberships.find_by(beer_club_id:@beer_club.id) : Membership.new
     @membership.beer_club = @beer_club
+    end
+    @pending = @beer_club.pending_memberships
   end
   # GET /beer_clubs/new
   def new
@@ -30,9 +32,11 @@ class BeerClubsController < ApplicationController
   # POST /beer_clubs.json
   def create
     @beer_club = BeerClub.new(beer_club_params)
-
+    
     respond_to do |format|
       if @beer_club.save
+        new_membership = create_membership_for_beer_club
+        @beer_club.memberships
         format.html { redirect_to @beer_club, notice: 'Beer club was successfully created.' }
         format.json { render :show, status: :created, location: @beer_club }
       else
@@ -77,5 +81,9 @@ class BeerClubsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def beer_club_params
       params.require(:beer_club).permit(:name, :founded)
+    end
+
+    def create_membership_for_beer_club
+      @beer_club.memberships.create beer_club_id:@beer_club.id, user_id:current_user.id, confirmed:true
     end
 end

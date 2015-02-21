@@ -29,6 +29,8 @@ gem 'httparty'
 gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 
+gem 'jquery-turbolinks'
+gem 'rack-mini-profiler'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
@@ -41,6 +43,8 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'webmock'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

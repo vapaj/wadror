@@ -27,10 +27,23 @@
   <strong>Members:</strong>
   <ul>
   	<% @beer_club.members.each do |member| %>
-        <li><%= member.username %></li>
+      <% unless @pending.any? { |p| p.user_id == member.id } %>
+          <li><%= member.username %></li>
+      <% end %>
+    <% end %>
+   </ul>
+</p>
+<p>
+  <strong>Pending applications:</strong>
+  <ul>
+    <% @pending.each do |member| %>
+        <li><%= member.user.username %> 
+          <% if current_user and current_user.already_belongs_to_club(@beer_club.id) and current_user.is_confirmed_member_of_club(@beer_club.id) %>
+            <%= link_to 'Confirm membership', confirm_membership_membership_path(member.user_id), method: :post, class: "btn btn-primary btn-sm" %>
+          <% end %>
+        </li>
       <% end %>
    </ul>
 </p>
-
 <%= link_to 'Edit', edit_beer_club_path(@beer_club) %> |
 <%= link_to 'Back', beer_clubs_path %>

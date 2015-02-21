@@ -13,12 +13,19 @@ Rails.application.routes.draw do
   resource :session, only: [:new, :create, :delete]
   resources :places, only:[:index, :show]
   root 'breweries#index'
+  get 'brewerylist', to:'breweries#list'
   get 'kaikki_bisset', to: 'beers#index'
+  get 'beerlist', to:'beers#list'
+  get 'ngbeerlist', to:'beers#nglist'
   get 'signup', to: 'users#new'
   get 'signin', to: 'sessions#new'
   delete 'signout', to: 'sessions#destroy'
   get 'places', to: 'places#index'
   post 'places', to:'places#search'
+
+  resources :memberships do
+    post 'confirm_membership', on: :member
+  end
 
   resources :breweries do
     post 'toggle_activity', on: :member
@@ -27,6 +34,8 @@ Rails.application.routes.draw do
   resources :users do
     post 'suspend_user', on: :member
   end
+
+
   # get 'ratings', to: 'ratings#index'
   # get 'ratings/new', to:'ratings#new'
   # post 'ratings', to: 'ratings#create'

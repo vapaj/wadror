@@ -26,15 +26,18 @@ class MembershipsController < ApplicationController
   # POST /memberships.json
   def create
     @membership = Membership.new(membership_params)
+    @membership.confirmed = false
+
     already_belongs_to_club = lambda {
       current_user.memberships.each do |m|
         return true if m.beer_club_id == params['membership'][:beer_club_id].to_i
       end
       false
     }
+
     if not already_belongs_to_club.call and @membership.save
       current_user.memberships << @membership
-      flash[:notice] = "#{current_user.username}, welcome to the club!"
+      flash[:notice] = "#{current_user.username}, you become a full member when your application is confirmed."
       redirect_to beer_club_path params['membership'][:beer_club_id].to_i
       
       # redirect_to user_path current_user
@@ -69,6 +72,13 @@ class MembershipsController < ApplicationController
       format.html { redirect_to user_path current_user }
       format.json { head :no_content }
     end
+  end
+
+  def confirm_membership
+    membership = Membership.find_by user_id:params[:id]
+    membership.update_attribute :confirmed, true
+
+    redirect_to :back, notice:"Confirmed membership of #{membership.user.username}"
   end
 
   private

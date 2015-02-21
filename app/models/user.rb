@@ -55,8 +55,17 @@ class User < ActiveRecord::Base
 		return false
 	end
 
+	def is_confirmed_member_of_club(beer_club_id)
+		memberships.find_by(beer_club_id:beer_club_id).confirmed
+	end
+
 	def self.most_active_users(n)
 		users_and_ratings_count = User.all.sort_by { |u| -(u.ratings.count) }
 		users_and_ratings_count.take(n)
+	end
+
+	def confirm_membership(beer_club_id)
+		confirm_beer_club_membership = memberships.find_by beer_club_id: beer_club_id
+		confirm_beer_club_membership.update_attribute(:confirmed, true)
 	end
 end

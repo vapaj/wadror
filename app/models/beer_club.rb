@@ -1,5 +1,5 @@
 class BeerClub < ActiveRecord::Base
-	has_many :memberships
+	has_many :memberships, dependent: :destroy
 	has_many :members, -> { uniq }, through: :memberships, source: :user
 
 	def to_s
@@ -11,5 +11,9 @@ class BeerClub < ActiveRecord::Base
       		return true if m.beer_club_id == params['membership'][:beer_club_id].to_i
     	end
     	false
+	end
+
+	def pending_memberships
+		memberships.where confirmed:false
 	end
 end
