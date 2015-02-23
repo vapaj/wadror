@@ -18,7 +18,9 @@
 <h2>Five latest ratings</h2>
 <ul>
 <% @five_latest.each do |rating| %>
-	<li> <%= @users.find(rating.user_id).username %> has rated <%= @beers.find(rating.beer_id).name %> with score of <%= rating.score %> at <%= rating.created_at %></li>
+	<li> 
+		<%= rating.user.username %> has rated <%= rating.beer.name %> with score of <%= rating.score %> at <%= rating.created_at %>
+	</li>
 <% end %>
 </ul>
 
@@ -33,7 +35,7 @@
 Number of ratings <%= @ratings.count %>
 <ul>
  <% @ratings.each do |rating| %>
-   <li> <%= rating %> <%= link_to @users.find(rating.user_id).username, user_path(rating.user_id) %> </li>
+   <li> <%= rating %> <%= link_to rating.user.username, user_path(rating.user_id) %> </li>
  <% end %>
 </ul>
 

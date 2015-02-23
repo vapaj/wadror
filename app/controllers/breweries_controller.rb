@@ -2,16 +2,21 @@ class BreweriesController < ApplicationController
   before_action :set_brewery, only: [:show, :edit, :update, :destroy]
   before_action :ensure_that_signed_in, except: [:index, :show, :list]
   before_action :ensure_that_admin, only: [:destroy]
+  before_action :skip_if_cached, only:[:index]
 
+  def skip_if_cached
+    @oldOrder = @order;
+    @order = params[:order] || 'name'
+    set_active_breweries
+    return render :index if fragment_exist?( "brewerylist-#{@order}"  )
+  end
   # GET /breweries
   # GET /breweries.json
   def index
     @breweries = Brewery.all
-    @active_breweries = Brewery.active
-    @retired_breweries = Brewery.retired
-    order = params[:order] || 'name'
-    session[:brewery_sorted_by] = "asc" unless session[:brewery_sorted_by]
-
+    set_active_breweries
+    @order = params[:order] || 'name'
+    session[:brewery_sorted_by] = "asc" if not session[:brewery_sorted_by] or @order != @oldOrder
     sort_by_param = lambda {
       |breweries, order|
       case order
@@ -28,20 +33,24 @@ class BreweriesController < ApplicationController
     }
 
     if session[:brewery_sorted_by] == "asc"
-      @active_breweries = sort_by_param.call(@active_breweries, order)
-      @retired_breweries = sort_by_param.call(@retired_breweries, order)
+      @active_breweries = sort_by_param.call(@active_breweries, @order)
+      @retired_breweries = sort_by_param.call(@retired_breweries, @order)
       session[:brewery_sorted_by] = "desc"
     else
       session[:brewery_sorted_by] = "asc"
-      @active_breweries = reverse_sort_by_param.call(@active_breweries, order)
-      @retired_breweries = reverse_sort_by_param.call(@retired_breweries, order)
+      @active_breweries = reverse_sort_by_param.call(@active_breweries, @order)
+      @retired_breweries = reverse_sort_by_param.call(@retired_breweries, @order)
     end
+
   end
   
+  def set_active_breweries
+    @active_breweries = Brewery.active
+    @retired_breweries = Brewery.retired
+  end
   # GET /breweries/1
   # GET /breweries/1.json
   def show
-
   end
 
   # GET /breweries/new
@@ -56,6 +65,7 @@ class BreweriesController < ApplicationController
   # POST /breweries
   # POST /breweries.json
   def create
+    ["brewerylist-name", "brewerylist-brewery", "brewerylist-style"].each{ |f| expire_fragment(f) }
     @brewery = Brewery.new(brewery_params)
 
     respond_to do |format|
@@ -72,6 +82,7 @@ class BreweriesController < ApplicationController
   # PATCH/PUT /breweries/1
   # PATCH/PUT /breweries/1.json
   def update
+    ["brewerylist-name", "brewerylist-brewery", "brewerylist-style"].each{ |f| expire_fragment(f) }
     @brewery = Brewery.find(params[:id])
     respond_to do |format|
       if @brewery.update(brewery_params)
@@ -87,6 +98,7 @@ class BreweriesController < ApplicationController
   # DELETE /breweries/1
   # DELETE /breweries/1.json
   def destroy
+    ["brewerylist-name", "brewerylist-brewery", "brewerylist-style"].each{ |f| expire_fragment(f) }
     @brewery = Brewery.find(params[:id])
     @brewery.destroy
     respond_to do |format|
